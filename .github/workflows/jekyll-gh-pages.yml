@@ -1,31 +1,18 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
 name: Deploy Jekyll with GitHub Pages dependencies preinstalled
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: ["source"]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: write
   pages: write
   id-token: write
 
-# Allow one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: true
-
-name: Deploy Jekyll with GitHub Pages
-
-on:
-  push:
-    branches:
-      - main
 
 jobs:
   build:
@@ -47,37 +34,12 @@ jobs:
       - name: Build site
         run: bundle exec jekyll build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
- 
+          name: jekyll-site
+          path: ./_site
 
-# jobs:
-#   # Build job
-#   build:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout
-#         uses: actions/checkout@v2
-#       - name: Setup Ruby
-#         uses: ruby/setup-ruby@v1
-#         with:
-#           ruby-version: '3.0'
-#           bundler-cache: false
-#       - name: Install dependencies
-#         run: |
-#           bundle install
-#       - name: Build with Jekyll
-#         run: bundle exec jekyll build -d ./_site
-#       - name: Upload artifact
-#         uses: actions/upload-pages-artifact@v3
-#         with:
-#           name: jekyll-site
-#           path: ./_site
-
-  # Deployment job
   deploy:
     environment:
       name: github-pages
@@ -87,7 +49,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           artifact-name: jekyll-site
